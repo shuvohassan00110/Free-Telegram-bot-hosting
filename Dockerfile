@@ -10,8 +10,8 @@ RUN groupadd -g 10014 appuser && \
 
 WORKDIR /app
 
-COPY requirements.txt .
 RUN pip install --no-cache-dir -U pip && \
+    pip install --no-cache-dir "python-telegram-bot[webhooks]>=21.6" "tornado>=6.4.1" && \
     pip install --no-cache-dir -r requirements.txt
 
 COPY . .
