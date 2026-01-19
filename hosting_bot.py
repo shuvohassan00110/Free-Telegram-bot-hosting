@@ -2282,19 +2282,19 @@ def build_app() -> Application:
     return app
 
 if __name__ == "__main__":
-    print("HostingBot starting...")
-
     app = build_app()
 
-    # Webhook recommended for Choreo
-    if WEBHOOK_ENABLED and PUBLIC_BASE_URL:
-        app.run_webhook(
+    if WEBHOOK_ENABLED:
+        kwargs = dict(
             listen="0.0.0.0",
             port=PORT,
             url_path=WEBHOOK_PATH.lstrip("/"),
-            webhook_url=f"{PUBLIC_BASE_URL}{WEBHOOK_PATH}",
             drop_pending_updates=True,
         )
+        # PUBLIC_BASE_URL না থাকলেও server চালু থাকবে (readiness pass করবে)
+        if PUBLIC_BASE_URL:
+            kwargs["webhook_url"] = f"{PUBLIC_BASE_URL}{WEBHOOK_PATH}"
+
+        app.run_webhook(**kwargs)
     else:
-        # fallback (first deploy helpful if you don't know PUBLIC_BASE_URL yet)
         app.run_polling(drop_pending_updates=True, close_loop=False)
