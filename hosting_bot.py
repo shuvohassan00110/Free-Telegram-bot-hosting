@@ -1148,7 +1148,8 @@ async def install_requirements(project_id: int) -> str:
     raw = req_path.read_text(encoding="utf-8", errors="replace")
     ok_parse, ok_lines, bad_lines = parse_requirements_text(raw)
     if not ok_parse:
-        return ui_card("requirements.txt Blocked", ["❌ Unsafe lines found.", "", f"<pre>{escape_html('\\n'.join(bad_lines[:15]))}</pre>"])
+        return ui_card("requirements.txt Blocked", ["❌ Unsafe lines found.", "", "<pre>" 
+    + escape_html("\n".join(bad_lines[:15])) + "</pre>"])
     if not ok_lines:
         return ui_card("requirements.txt", ["⚠️ Nothing to install."])
 
